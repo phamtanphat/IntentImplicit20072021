@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import com.example.intentimplicit20072021.databinding.ActivityMainBinding;
@@ -62,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
                             REQUEST_CODE_GALLERY
                     );
                 }else{
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    cameraLauncher.launch(intent);
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    galleryLauncher.launch(intent);
                 }
             }
         });
@@ -78,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 cameraLauncher.launch(intent);
             }
         }
+        if (requestCode == REQUEST_CODE_GALLERY){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                galleryLauncher.launch(intent);
+            }
+        }
     }
 
     ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -85,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if(result != null){
                 mMainBinding.imageview.setImageBitmap((Bitmap) result.getData().getExtras().get("data"));
+            }
+        }
+    });
+
+    ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result != null){
+                mMainBinding.imageview.setImageURI(result.getData().getData());
             }
         }
     });
