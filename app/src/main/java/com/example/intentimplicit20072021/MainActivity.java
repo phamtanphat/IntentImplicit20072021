@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding mMainBinding;
     int REQUEST_CODE_CAMERA = 123;
+    int REQUEST_CODE_GALLERY = 234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,23 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     cameraLauncher.launch(intent);
+                }
+            }
+        });
+        mMainBinding.buttonGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityCompat.checkSelfPermission(
+                        MainActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(
+                            MainActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQUEST_CODE_GALLERY
+                    );
+                }else{
+//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                    cameraLauncher.launch(intent);
                 }
             }
         });
